@@ -6,8 +6,8 @@ from pygame.locals import *
 from pygame.time import Clock
 
 def on_grid_random():
-    x = rd.randint(0,590)
-    y = rd.randint(0,590)
+    x = rd.randint(0,580)
+    y = rd.randint(0,580)
     return(x //10 *10, y//10 *10) 
     ## divisao inteira ##
 
@@ -28,6 +28,7 @@ def function_wall():
         screen.blit(wall,(i,0))
         screen.blit(wall,(i,590))
     #g.fill(255,10,10)
+
 
 #font = pg.Font.SysFont('Arial', 20)
 #ponts_text = font.render('Score: ', False, (200,200,190))   
@@ -65,13 +66,25 @@ ponts = int(0)
 
 game_over = False
 
+#def ciclo_hamiltoniano_IA(snake,my_direction):
+    #for snake in range:
+       # if (snake[0][0] <= 0):
+       #     my_direction = UP
+       # if (snake[0][0] >= 590):
+       #     my_direction = DOWN
+        #if (snake[0][1] <= 0):
+       #     my_direction = RIGHT
+      #  if (snake[0][1] >= 590):  
+     #       my_direction = LEFT  
+    #return my_direction
+
 while True:
     Clock.tick(20)
 
     for event in pg.event.get():
         if event.type == QUIT:
             pg.quit()
-        if event.type ==KEYDOWN:
+        if event.type == KEYDOWN:
             if event.key == K_UP:
                 my_direction = UP
             if event.key == K_DOWN:
@@ -109,7 +122,7 @@ while True:
 
     if (snake[0][0] <= 0 or snake[0][0] >= 590 or snake[0][1] <= 0 or snake[0][1] >= 590):
         game_over = True
-
+    #my_direction = ciclo_hamiltoniano_IA(snake,my_direction)
     function_wall()
     #print_score()
     ponts = Ponts(ponts,snake[0],apple_pos)
