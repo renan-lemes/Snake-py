@@ -1,5 +1,7 @@
 import pygame as pg
 import random as rd
+import json
+
 from pygame.locals import *
 from pygame.time import Clock
 
@@ -8,9 +10,34 @@ def on_grid_random():
     y = rd.randint(0,590)
     return(x //10 *10, y//10 *10) 
     ## divisao inteira ##
-def clollision(c1,c2):
+
+def collision(c1,c2):
     return (c1[0] == c2[0]) and (c1[1] == c2[1])
 
+### feito o sistema de pontos ###
+def Ponts(ponts,c1,c2):
+    if  collision(c1,c2) == True:
+        return (ponts +1)
+    else :
+        return (ponts +0)    
+
+def function_wall():
+    for i in range(0,600,10):
+        screen.blit(wall,(0,i))
+        screen.blit(wall,(590,i))
+        screen.blit(wall,(i,0))
+        screen.blit(wall,(i,590))
+    #g.fill(255,10,10)
+
+#font = pg.Font.SysFont('Arial', 20)
+#ponts_text = font.render('Score: ', False, (200,200,190))   
+
+#def print_score():
+ #   ponts_value = font.render(str(ponts), False, (255,255,255))
+  #  screen.blit(ponts_text,(20,550))
+   # screen.blit(ponts_value,(100,550))
+
+   
 
 UP = 0
 RIGHT = 1
@@ -21,6 +48,8 @@ pg.init()
 screen = pg.display.set_mode((600,600))
 pg.display.set_caption('Snake')
 
+wall = pg.Surface((10,10))
+wall.fill((200,200,200))
 ## a snake vai ser uma lista de seguimentos e uma dupla ##
 snake = [(200,200), (210,200),(220,200)]
 snake_skin = pg.Surface((10,10))
@@ -32,9 +61,13 @@ apple = pg.Surface((10,10))
 apple.fill((255,50,50))
 
 Clock = pg.time.Clock()
+ponts = int(0)
+
+game_over = False
 
 while True:
     Clock.tick(20)
+
     for event in pg.event.get():
         if event.type == QUIT:
             pg.quit()
@@ -48,7 +81,7 @@ while True:
             if event.key == K_LEFT:
                 my_direction = LEFT   
 
-    if clollision(snake[0], apple_pos):
+    if collision(snake[0], apple_pos):
        apple_pos = on_grid_random()  
        snake.append((0,0)) 
 
@@ -68,5 +101,23 @@ while True:
     screen.blit(apple ,apple_pos)
     for pos in snake:
         screen.blit(snake_skin,pos)
+    
+    for i in snake[1:]:
+        if collision(snake[0],i):
+            game_over = True;
+            break
 
+    if (snake[0][0] <= 0 or snake[0][0] >= 590 or snake[0][1] <= 0 or snake[0][1] >= 590):
+        game_over = True
+
+    function_wall()
+    #print_score()
+    ponts = Ponts(ponts,snake[0],apple_pos)
+    
+    if game_over:
+        break
+    
+    #print(ponts)
     pg.display.update()
+    
+
