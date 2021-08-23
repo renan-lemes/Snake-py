@@ -6,8 +6,8 @@ from pygame.locals import *
 from pygame.time import Clock
 
 def on_grid_random():
-    x = rd.randint(0,580)
-    y = rd.randint(0,580)
+    x = rd.randint(0,500)
+    y = rd.randint(0,500)
     return(x //10 *10, y//10 *10) 
     ## divisao inteira ##
 
@@ -21,13 +21,14 @@ def Ponts(ponts,c1,c2):
     else :
         return (ponts +0)    
 
+
 def function_wall():
-    for i in range(0,600,10):
+    for i in range(0,590,10):
         screen.blit(wall,(0,i))
         screen.blit(wall,(590,i))
         screen.blit(wall,(i,0))
         screen.blit(wall,(i,590))
-    #g.fill(255,10,10)
+   
 
 
 #font = pg.Font.SysFont('Arial', 20)
@@ -66,20 +67,25 @@ ponts = int(0)
 
 game_over = False
 
-#def ciclo_hamiltoniano_IA(snake,my_direction):
-    #for snake in range:
-       # if (snake[0][0] <= 0):
-       #     my_direction = UP
-       # if (snake[0][0] >= 590):
-       #     my_direction = DOWN
-        #if (snake[0][1] <= 0):
-       #     my_direction = RIGHT
-      #  if (snake[0][1] >= 590):  
-     #       my_direction = LEFT  
-    #return my_direction
+def Up(snake):
+    snake[0] = (snake[0][0],snake[0][1]-10)
 
+def Donw(snake):
+    snake[0] = (snake[0][0],snake[0][1]+10)  
+
+def Right(snake):
+    snake[0] = (snake[0][0]+10,snake[0][1])
+
+def Left(snake):
+    snake[0] = (snake[0][0]-10,snake[0][1])    
+
+#def ciclo_hamiltoniano_IA(snake):
+    #for i in range(len(snake) - 1, 0, -1):
+       # snake[i] = (snake[i-1][0], snake[i-1][1])   
+    #Up(snake)
+    
 while True:
-    Clock.tick(20)
+    Clock.tick(15)
 
     for event in pg.event.get():
         if event.type == QUIT:
@@ -100,7 +106,8 @@ while True:
 
     for i in range(len(snake) - 1, 0, -1):
         snake[i] = (snake[i-1][0], snake[i-1][1])            
-
+        #ciclo_hamiltoniano_IA(snake)
+        
     if my_direction == UP:
         snake[0] = (snake[0][0],snake[0][1]-10) ## (x , y)
     if my_direction == DOWN:
@@ -112,6 +119,7 @@ while True:
 
     screen.fill((0,0,0))
     screen.blit(apple ,apple_pos)
+
     for pos in snake:
         screen.blit(snake_skin,pos)
     
@@ -119,10 +127,16 @@ while True:
         if collision(snake[0],i):
             game_over = True;
             break
+    
+    for i in snake[1:]:
+        if collision(snake,i) or snake[0][0] >= 500:
+            Donw(snake)
 
-    if (snake[0][0] <= 0 or snake[0][0] >= 590 or snake[0][1] <= 0 or snake[0][1] >= 590):
+    if (snake[0][0] <= -1 or snake[0][0] >= 590 or snake[0][1] <= -1 or snake[0][1] >= 590):
         game_over = True
-    #my_direction = ciclo_hamiltoniano_IA(snake,my_direction)
+ 
+    
+    
     function_wall()
     #print_score()
     ponts = Ponts(ponts,snake[0],apple_pos)
