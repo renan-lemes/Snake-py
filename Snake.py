@@ -147,4 +147,3 @@ while True:
     #print(ponts)
     pg.display.update()
     
-
