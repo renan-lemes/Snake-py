@@ -1,4 +1,4 @@
-#  Jogo do Snake em Pyton
+#  Jogo do Snake em Python
 
 ## Objetivo: 
 Aprender mais sobre a liguagem e entender suas principais funções e como programar.
